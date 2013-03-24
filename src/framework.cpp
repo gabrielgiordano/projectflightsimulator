@@ -1,5 +1,4 @@
 #include "../headers/framework.h"
-#include <iostream>
 
 const double Framework::FRAME_TIME = 1.0 / Framework::FPS * 1000.0;
 
@@ -15,7 +14,7 @@ Framework::~Framework() {}
 void Framework::startFramework(int argc, char *argv[]) {
     setInstance();
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH | GLUT_ALPHA);
     glutInitWindowPosition(WINDOW_X_POSITION, WINDOW_Y_POSITION);
     if(fullScreen)
         glutFullScreen();

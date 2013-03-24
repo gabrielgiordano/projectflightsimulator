@@ -3,12 +3,14 @@
 
 #include "stopwatch.h"
 #include <string>
+#include <iostream>
 
 #ifdef FRAMEWORK_USE_GLEW
     #include <GL/glew.h>
 #endif
 
 #include <GL/glut.h>
+#include <glm/glm.hpp>
 
 using namespace std;
 
@@ -28,8 +30,8 @@ protected:
 public:
 
     const static GLint FPS = 60;
-    const static GLint WINDOW_WIDTH = 500;
-    const static GLint WINDOW_HEIGHT = 500;
+    const static GLint WINDOW_WIDTH = 640;
+    const static GLint WINDOW_HEIGHT = 480;
     const static GLint WINDOW_X_POSITION = 100;
     const static GLint WINDOW_Y_POSITION = 100;
     const static GLdouble FRAME_TIME;
