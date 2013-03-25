@@ -1,61 +1,71 @@
 #include "../headers/observer.h"
-#include <iostream>
-using namespace std;
 
-void Observer::initialize(glm::vec3 eye, glm::vec3 center, glm::vec3 upp) 
+void Observer::initialize(vec3 eye, vec3 center, vec3 upp) 
 {
-    this->normal = center - eye;
-    this->upp = upp - center;
-    this->cross = glm::cross(this->normal, this->upp);
+    position = eye;
+    axisZ = center - eye;
+    axisY = upp - eye;
+    axisX = cross(axisZ, axisY);
 
-    view = glm::lookAt(eye, center, upp);
+    pitchAngle = yawAngle = rollAngle = 0.0f;
+    translation = vec3(0.0f, 0.0f, 0.0f);
 }
 
-void Observer::walk(glm::vec3 distance)
+void Observer::pitch(GLfloat pitch) {pitchAngle += pitch;}
+
+void Observer::yaw(GLfloat yaw) {yawAngle += yaw;}
+
+void Observer::roll(GLfloat roll) {rollAngle += roll;}
+
+void Observer::doRotations(vec3 &aux_AxisX, vec3 &aux_AxisY, vec3 &aux_AxisZ)
 {
-    glm::mat4 translate(1.0f);
+    mat4 pitchMatrix(1.0f), yawMatrix(1.0f), rollMatrix(1.0f);
+
+    pitchMatrix = rotate(pitchMatrix, pitchAngle, axisX);
+    yawMatrix = rotate(yawMatrix, yawAngle, axisY);
+    rollMatrix = rotate(rollMatrix, rollAngle, axisZ);
+
+    // Apply the pitch rotation
+    aux_AxisY = vec3(pitchMatrix * vec4(axisY, 1.0f));
+    aux_AxisZ = vec3(pitchMatrix * vec4(axisZ, 1.0f));
+
+    // Apply the yaw rotation
+    aux_AxisX = vec3(yawMatrix * vec4(axisX, 1.0f));
+    aux_AxisZ = vec3(yawMatrix * vec4(axisZ, 1.0f));
+
+    // Apply the roll rotation
+    aux_AxisX = vec3(rollMatrix * vec4(axisX, 1.0f));
+    aux_AxisY = vec3(rollMatrix * vec4(axisY, 1.0f));
+}
+
+void Observer::walk(vec3 distance)
+{
+    vec3 aux_AxisX, aux_AxisY, aux_AxisZ;
+
+    aux_AxisX = aux_AxisY = aux_AxisZ = vec3(0.0f, 0.0f, 0.0f);
     
-    translate = glm::translate(translate, distance);
+    doRotations(aux_AxisX, aux_AxisY, aux_AxisZ);
 
-    normal = glm::vec3(translate * glm::vec4(normal, 1.0f));
-    upp = glm::vec3(translate * glm::vec4(upp, 1.0f));
-    cross = glm::vec3(translate * glm::vec4(cross, 1.0f));
+    aux_AxisZ = normalize(aux_AxisZ);
 
-    view = view * translate;
-}
-
-void Observer::pitch(GLfloat pitch) 
-{
-    glm::mat4 rotate(1.0f);
+    translation = aux_AxisZ * distance;
     
-    rotate = glm::rotate(rotate, pitch, cross);
-
-    normal = glm::vec3(rotate * glm::vec4(normal, 1.0f));
-    upp = glm::vec3(rotate * glm::vec4(upp, 1.0f));
-
-    view = view * rotate;
 }
 
-void Observer::yaw(GLfloat yaw) 
+void Observer::setObserver() 
 {
-    glm::mat4 rotate(1.0f);
+    vec3 aux_AxisX, aux_AxisY, aux_AxisZ, upp;
+
+    aux_AxisX = aux_AxisY = aux_AxisZ = vec3(0.0f, 0.0f, 0.0f);
     
-    rotate = glm::rotate(rotate, yaw, upp);
+    doRotations(aux_AxisX, aux_AxisY, aux_AxisZ);
 
-    normal = glm::vec3(rotate * glm::vec4(normal, 1.0f));
-    cross = glm::vec3(rotate * glm::vec4(cross, 1.0f));
+    upp = aux_AxisY;
+    // Apply translations
+    position  += translation;
+    aux_AxisX += translation;
+    aux_AxisY += translation;
+    aux_AxisZ += translation;
 
-    view = view * rotate;
-}
-
-void Observer::roll(GLfloat roll) 
-{
-    glm::mat4 rotate(1.0f);
-
-    rotate = glm::rotate(rotate, roll, normal);
-
-    upp = glm::vec3(rotate * glm::vec4(upp, 1.0f));
-    cross = glm::vec3(rotate * glm::vec4(cross, 1.0f));
-
-    view = view * rotate;
+    view = lookAt(position, aux_AxisZ, upp);
 }

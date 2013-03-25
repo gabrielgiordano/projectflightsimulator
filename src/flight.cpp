@@ -62,7 +62,7 @@ void Flight::display ()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     // Reset The Current Modelview Matrix
     glLoadIdentity();
-
+    observer.setObserver();
     glMultMatrixf(&observer.view[0][0]);
 
     // Move Left 1.5 Units And Into The Screen 6.0
