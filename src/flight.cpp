@@ -38,13 +38,75 @@ void Flight::display ()
     glLoadIdentity();
 
     observer.setObserver();
-    glMultMatrixf(&observer.view[0][0]);
+    // glMultMatrixf(&observer.view[0][0]);
+    gluLookAt(  5.0f, 5.0f, 5.0f,
+                -5.0f, -5.0f, -5.0f,
+                0.0f, 1.0f, 0.0f);
 
-    glColor3f(0.9f, 0.9f, 0.9f);
-    float Tamanho = 100.0f;
+    glLineStipple(4, 0xAAAA);
+    glEnable(GL_LINE_STIPPLE);
+
+    glBegin(GL_LINES);
+        // X AXIS
+        glColor3f(1.0f, 0.0f, 0.0f);
+        glVertex3f(0.0f, 0.0f, 0.0f);
+        glVertex3f(100.0f, 0.0f, 0.0f);
+        // Y AXIS
+        glColor3f(0.0f, 1.0f, 0.0f);
+        glVertex3f(0.0f, 0.0f, 0.0f);
+        glVertex3f(0.0f, 100.0f, 0.0f);
+        // Z AXIS
+        glColor3f(0.0f, 0.0f, 1.0f);
+        glVertex3f(0.0f, 0.0f, 0.0f);
+        glVertex3f(0.0f, 0.0f, 100.0f);
+    glEnd();
+
+
+    vec3 pitch, roll, yaw;
+    pitch = observer.axisX - observer.origin;
+    yaw = observer.axisY - observer.origin;
+    roll = observer.axisZ - observer.origin;
+
+    glBegin(GL_LINES);
+        glColor3f(1.0f, 1.0f, 1.0f);
+        // X AXIS
+        //glColor3f(0.871f, 0.376f, 0.376f);
+        glVertex3f(0.0f, 0.0f, 0.0f);
+        glVertex3fv(&pitch[0]);
+        // Y AXIS
+        //glColor3f(0.212f, 0.839f, 0.525f);
+        glVertex3f(0.0f, 0.0f, 0.0f);
+        glVertex3fv(&yaw[0]);
+        // Z AXIS
+        //glColor3f(0.161f, 0.792f, 0.792f);
+        glVertex3f(0.0f, 0.0f, 0.0f);
+        glVertex3fv(&roll[0]);
+    glEnd();
+
+    glDisable(GL_LINE_STIPPLE);
+
+
+    glBegin(GL_LINES);
+        // X AXIS
+        glColor3f(0.871f, 0.376f, 0.376f);
+        glVertex3fv(&observer.origin[0]);
+        glVertex3fv(&observer.axisX[0]);
+        // Y AXIS
+        glColor3f(0.212f, 0.839f, 0.525f);
+        glVertex3fv(&observer.origin[0]);
+        glVertex3fv(&observer.axisY[0]);
+        // Z AXIS
+        glColor3f(0.161f, 0.792f, 0.792f);
+        glVertex3fv(&observer.origin[0]);
+        glVertex3fv(&observer.axisZ[0]);
+    glEnd();
+
+
+    /*float Tamanho = 100.0f;
     float piso = -25.0f;
     float teto = 50.0f;
     glBegin(GL_QUADS);
+        glColor3f(0.9f, 0.9f, 0.9f);
         glVertex3f(-Tamanho,piso , -Tamanho);
         glVertex3f(-Tamanho, piso,  Tamanho);
         glVertex3f( Tamanho, piso,  Tamanho);
@@ -79,7 +141,7 @@ void Flight::display ()
         glVertex3f(-Tamanho, piso,  Tamanho);
         glVertex3f( -Tamanho, teto,  Tamanho);
         glVertex3f( Tamanho, teto, Tamanho);
-    glEnd();
+    glEnd();*/
 
     glutSwapBuffers();
 }

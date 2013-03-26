@@ -12,11 +12,11 @@ class Observer {
 
 private:
 
-    vec3 position, axisZ, axisY, axisX;
-    vec3 upp;
+    
 
 public:
     
+    vec3 origin, axisX, axisY, axisZ;    
     mat4 view;
 
     Observer() {}
@@ -26,8 +26,11 @@ public:
     void pitch(GLfloat pitchAngle);
     void yaw(GLfloat yawAngle);
     void roll(GLfloat rollAngle);
+    void translateToOrigin();
+    void translateBack();
     void walk(GLfloat distance);
     void setObserver();
+    void normalizeAxis();
     void debug();
 };
 

@@ -8,7 +8,6 @@
 
 #include "framework.h"
 #include "observer.h"
-#include "SOIL.h"
 
 class Flight : public Framework
 {
