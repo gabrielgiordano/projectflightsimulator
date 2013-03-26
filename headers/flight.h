@@ -18,14 +18,10 @@ private:
     glm::vec4 lightAmbient;
     glm::vec4 lightDiffuse;
     glm::vec4 lightPosition;
-
-    GLdouble deepOnZ;
-    GLuint * texture;
     
 public:
     Flight();
     ~Flight() {}
-    bool loadTextures();
 
     virtual void display();
     virtual void reshape(GLint width, GLint height);
