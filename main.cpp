@@ -1,9 +1,9 @@
-#include "headers/flight.h"
+#include "headers/application.h"
 using namespace std;
 
 int main(int argc, char** argv)
 {
-    Flight flight;
-    flight.startFramework(argc,argv);
+    Application application;
+    application.startFramework(argc,argv);
     return 0;
 }
