@@ -1,26 +1,29 @@
-#ifndef FLIGHT_H
-#define FLIGHT_H
+#ifndef APPLICATION_H
+#define APPLICATION_H
 
-#include <cmath>
+#include "framework.h"
+#include "../headers/object.h"
+
 #include <GL/gl.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "framework.h"
-#include "observer.h"
+using namespace glm;
 
-class Flight : public Framework
+class Application : public Framework
 {
-private:
-    Observer observer;
 
-    glm::vec4 lightAmbient;
-    glm::vec4 lightDiffuse;
-    glm::vec4 lightPosition;
+private:
+    
+    Object object;
+    vec4 lightAmbient;
+    vec4 lightDiffuse;
+    vec4 lightPosition;
     
 public:
-    Flight();
-    ~Flight() {}
+    
+    Application();
+    ~Application() {}
 
     virtual void display();
     virtual void reshape(GLint width, GLint height);
@@ -31,4 +34,4 @@ public:
     virtual void load();
 };
 
-#endif // FLIGHT_H
+#endif // APPLICATION_H
