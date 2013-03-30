@@ -25,20 +25,6 @@ void Camera::translate(vec3 distance)
     this->axisZ += distance;
 }
 
-void Camera::translateToOrigin()
-{
-    axisX -=  origin;
-    axisY -=  origin;
-    axisZ -=  origin;
-}
-
-void Camera::translateBack()
-{
-    axisX +=  origin;
-    axisY +=  origin;
-    axisZ +=  origin;
-}
-
 void Camera::translateInAxisX(GLfloat distance)
 {  
     vec3 direction = axisX - origin;
@@ -84,8 +70,9 @@ void Camera::translateInAxisZ(GLfloat distance)
 void Camera::rotateInAxisX(GLfloat pitchAngle) 
 {
     mat4 pitchMatrix(1.0f);
+    vec3 origin_aux = origin;
 
-    translateToOrigin();
+    translate(-origin_aux);
 
     pitchMatrix = rotate(pitchMatrix, pitchAngle, axisX);
 
@@ -93,14 +80,15 @@ void Camera::rotateInAxisX(GLfloat pitchAngle)
     axisY = vec3(pitchMatrix * vec4(axisY, 1.0f));
     axisZ = vec3(pitchMatrix * vec4(axisZ, 1.0f));
 
-    translateBack();
+    translate(origin_aux);
 }
 
 void Camera::rotateInAxisY(GLfloat yawAngle)
 {
     mat4 yawMatrix(1.0f);
-
-    translateToOrigin();
+    vec3 origin_aux = origin;
+    
+    translate(-origin_aux);
 
     yawMatrix = rotate(yawMatrix, yawAngle, axisY);
     
@@ -108,14 +96,15 @@ void Camera::rotateInAxisY(GLfloat yawAngle)
     axisY = vec3(yawMatrix * vec4(axisY, 1.0f));
     axisZ = vec3(yawMatrix * vec4(axisZ, 1.0f));
 
-    translateBack();
+    translate(origin_aux);
 }
 
 void Camera::rotateInAxisZ(GLfloat rollAngle) 
 {
     mat4 rollMatrix(1.0f);
+    vec3 origin_aux = origin;
 
-    translateToOrigin();
+    translate(-origin_aux);
 
     rollMatrix = rotate(rollMatrix, rollAngle, axisZ);
 
@@ -123,7 +112,7 @@ void Camera::rotateInAxisZ(GLfloat rollAngle)
     axisY = vec3(rollMatrix * vec4(axisY, 1.0f));
     axisZ = vec3(rollMatrix * vec4(axisZ, 1.0f));
 
-    translateBack();
+    translate(origin_aux);
 }
 
 void Camera::setCamera()

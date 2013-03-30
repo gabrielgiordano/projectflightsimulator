@@ -31,7 +31,7 @@ void Application::display ()
     // Reset The Current Modelview Matrix
     glLoadIdentity();
 
-    glTranslatef(0.0f, 0.0f, -6.0f);
+    glTranslatef(0.0f, 0.0f, 0.0f);
 
     object.draw();
 
@@ -83,12 +83,16 @@ void Application::keyboard(GLubyte key, GLsizei x, GLsizei y) {
 void Application::special(GLint key, GLint x, GLint y) { 
     switch(key) {
         case UP_ARROW:
+            object.rotateInAxisX(-1.0f);
             break;
         case DOWN_ARROW:
+            object.rotateInAxisX(+1.0f);
             break;
         case LEFT_ARROW:
+            object.rotateInAxisZ(-1.0f);
             break;
         case RIGHT_ARROW:
+            object.rotateInAxisZ(+1.0f);  
             break;
     }
 }
@@ -107,6 +111,8 @@ void Application::load()
     // Really Nice Perspective Calculations
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
+    startEnvironment();
+
     // Setup The Ambient Light
     glLightfv(GL_LIGHT1, GL_AMBIENT, &lightAmbient[0]);
     // Setup The Diffuse Light
@@ -116,7 +122,10 @@ void Application::load()
     // Enable Light One
     glEnable(GL_LIGHT1);
     glEnable(GL_LIGHTING);
+}
 
+void Application::startEnvironment() 
+{
     object.loadTexture("textures/tower.jpg");
     object.loadOBJ("models/tower.obj");
 }

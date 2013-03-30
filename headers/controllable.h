@@ -22,8 +22,6 @@ public:
 
     virtual void setCoordinateSystem(vec3 origin, vec3 axisX, vec3 axisY, vec3 axisZ) = 0;
     virtual void translate(vec3 distance) = 0;
-    virtual void translateToOrigin() = 0;
-    virtual void translateBack() = 0;
     virtual void translateInAxisX(GLfloat distance) = 0;
     virtual void translateInAxisY(GLfloat distance) = 0;
     virtual void translateInAxisZ(GLfloat distance) = 0;
@@ -32,4 +30,4 @@ public:
     virtual void rotateInAxisZ(GLfloat rollAngle) = 0;
 };
 
-#endif  
+#endif // CONTROLLABLE_H

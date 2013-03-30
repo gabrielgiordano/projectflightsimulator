@@ -25,6 +25,8 @@ public:
     Application();
     ~Application() {}
 
+    void startEnvironment();
+
     virtual void display();
     virtual void reshape(GLint width, GLint height);
     virtual void keyboard(GLubyte key, GLint x, GLint y);

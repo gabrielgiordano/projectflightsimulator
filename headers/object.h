@@ -22,8 +22,7 @@ private:
     GLMmodel * model;
     GLuint texture;
 
-    mat4 translation;
-    mat4 rotation;
+    mat4 transformations;
 
 public:   
 
@@ -36,8 +35,6 @@ public:
 
     void setCoordinateSystem(vec3 origin, vec3 axisX, vec3 axisY, vec3 axisZ);
     void translate(vec3 distance);
-    void translateToOrigin();
-    void translateBack();
     void translateInAxisX(GLfloat distance);
     void translateInAxisY(GLfloat distance);
     void translateInAxisZ(GLfloat distance);
@@ -47,4 +44,4 @@ public:
 
 };
 
-#endif
+#endif // OBJECT_H

@@ -4,8 +4,11 @@ Object::Object()
 {
     model = NULL;
     texture = 0;
-    translation = mat4(1.0f);
-    rotation = mat4(1.0f);
+    transformations = mat4(1.0f);
+    this->origin = vec3(0.0f, 0.0f, 0.0f);
+    this->axisX = vec3(1.0f, 0.0f, 0.0f);
+    this->axisY = vec3(0.0f, 1.0f, 0.0f);
+    this->axisZ = vec3(0.0f, 0.0f, -1.0f);
 }
 
 Object::~Object()
@@ -75,7 +78,8 @@ void Object::loadTexture(string filename)
 void Object::draw() {
 
     glMatrixMode(GL_MODELVIEW);
-    glMultMatrixf(&translation[0][0]);
+    glPushMatrix();
+    glMultMatrixf(&transformations[0][0]);
 
     if(model) {
         if(texture == 0) {
@@ -86,16 +90,26 @@ void Object::draw() {
             glmDraw(model, GLM_SMOOTH | GLM_TEXTURE);
         }
     }
-
-    glLoadIdentity();
+    glPopMatrix();
 }
 
 void Object::setCoordinateSystem(vec3 origin, vec3 axisX, vec3 axisY, vec3 axisZ) 
 {
+    mat4 matrix(1.0f);
+
+    row(matrix, 0, vec4(axisX,  0.0f));
+    row(matrix, 1, vec4(axisY,  0.0f));
+    row(matrix, 2, vec4(axisZ,  0.0f));
+    row(matrix, 3, vec4(origin, 1.0f));
+
+    matrix = affineInverse(matrix);
+
     this->origin = origin;
     this->axisX = axisX;
     this->axisY = axisY;
     this->axisZ = axisZ;
+
+    transformations = matrix;
 }
 
 void Object::translate(vec3 distance)
@@ -105,28 +119,20 @@ void Object::translate(vec3 distance)
         this->axisX += distance;
         this->axisY += distance;
         this->axisZ += distance;
+
+        mat4 translation(1.0f);
+
         translation = glm::translate(translation, distance);
+        transformations = translation * transformations;
+    }
+    else {
+        cerr << "Calling translate in object without any model loaded.";
+        exit(1);
     }
 }
 
-void Object::translateToOrigin()
-{
-    axisX -=  origin;
-    axisY -=  origin;
-    axisZ -=  origin;
-    translation = glm::translate(translation, -origin);
-}
-
-void Object::translateBack()
-{
-    axisX +=  origin;
-    axisY +=  origin;
-    axisZ +=  origin;
-    translation = glm::translate(translation, origin);
-}
-
 void Object::translateInAxisX(GLfloat distance)
-{  
+{
     vec3 direction = axisX - origin;
 
     direction = normalize(direction);
@@ -138,7 +144,10 @@ void Object::translateInAxisX(GLfloat distance)
     axisY += direction;
     axisZ += direction;
 
+    mat4 translation(1.0f);
+    
     translation = glm::translate(translation, direction);
+    transformations = translation * transformations;
 }
 
 void Object::translateInAxisY(GLfloat distance)
@@ -153,6 +162,11 @@ void Object::translateInAxisY(GLfloat distance)
     axisX += direction;
     axisY += direction;
     axisZ += direction;
+
+    mat4 translation(1.0f);
+    
+    translation = glm::translate(translation, direction);
+    transformations = translation * transformations;
 }
 
 void Object::translateInAxisZ(GLfloat distance)
@@ -167,28 +181,37 @@ void Object::translateInAxisZ(GLfloat distance)
     axisX += direction;
     axisY += direction;
     axisZ += direction;
+
+    mat4 translation(1.0f);
+    
+    translation = glm::translate(translation, direction);
+    transformations = translation * transformations;
 }
 
 void Object::rotateInAxisX(GLfloat pitchAngle) 
 {
     mat4 pitchMatrix(1.0f);
+    vec3 origin_aux = origin;
+    
+    translate(-origin_aux);
 
-    translateToOrigin();
-
-    pitchMatrix = rotate(pitchMatrix, pitchAngle, axisX);
+    pitchMatrix = rotate(pitchMatrix, pitchAngle, axisX);   
 
     axisX = vec3(pitchMatrix * vec4(axisX, 1.0f));
     axisY = vec3(pitchMatrix * vec4(axisY, 1.0f));
     axisZ = vec3(pitchMatrix * vec4(axisZ, 1.0f));
 
-    translateBack();
+    transformations = pitchMatrix * transformations;
+
+    translate(origin_aux);
 }
 
 void Object::rotateInAxisY(GLfloat yawAngle)
 {
     mat4 yawMatrix(1.0f);
-
-    translateToOrigin();
+    vec3 origin_aux = origin;
+    
+    translate(-origin_aux);
 
     yawMatrix = rotate(yawMatrix, yawAngle, axisY);
     
@@ -196,14 +219,17 @@ void Object::rotateInAxisY(GLfloat yawAngle)
     axisY = vec3(yawMatrix * vec4(axisY, 1.0f));
     axisZ = vec3(yawMatrix * vec4(axisZ, 1.0f));
 
-    translateBack();
+    transformations = yawMatrix * transformations;
+
+    translate(origin_aux);
 }
 
 void Object::rotateInAxisZ(GLfloat rollAngle) 
 {
     mat4 rollMatrix(1.0f);
-
-    translateToOrigin();
+    vec3 origin_aux = origin;
+    
+    translate(-origin_aux);
 
     rollMatrix = rotate(rollMatrix, rollAngle, axisZ);
 
@@ -211,5 +237,7 @@ void Object::rotateInAxisZ(GLfloat rollAngle)
     axisY = vec3(rollMatrix * vec4(axisY, 1.0f));
     axisZ = vec3(rollMatrix * vec4(axisZ, 1.0f));
 
-    translateBack();
+    transformations = rollMatrix * transformations;
+
+    translate(origin_aux);
 }

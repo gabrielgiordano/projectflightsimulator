@@ -36,4 +36,4 @@ private:
 
 };
 
-#endif
+#endif // STOPWATCH_H
