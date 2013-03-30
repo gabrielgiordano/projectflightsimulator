@@ -8,14 +8,6 @@ using namespace glm;
 
 class Controllable {
 
-private:
-
-    
-    /* CONTROLADOR GLfloat currentSpeed;
-    GLfloat maxSpeed;
-    GLfloat currentAcceleration;
-    GLfloat maxAcceleration;*/
-
 public:
 
     vec3 origin, axisX, axisY, axisZ;
@@ -28,6 +20,7 @@ public:
     virtual void rotateInAxisX(GLfloat pitchAngle) = 0;
     virtual void rotateInAxisY(GLfloat yawAngle) = 0;
     virtual void rotateInAxisZ(GLfloat rollAngle) = 0;
+    virtual void getCoordinateSystem(vec3 * coordinate) = 0;
 };
 
 #endif // CONTROLLABLE_H

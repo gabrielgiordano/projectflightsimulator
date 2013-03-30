@@ -115,7 +115,16 @@ void Camera::rotateInAxisZ(GLfloat rollAngle)
     translate(origin_aux);
 }
 
+void Camera::getCoordinateSystem(vec3 * coordinate) 
+{    
+    coordinate[0] = origin;
+    coordinate[1] = axisX;
+    coordinate[2] = axisY;
+    coordinate[3] = axisZ;
+}
+
 void Camera::setCamera()
 {
     view = lookAt(origin, axisZ, axisY - origin);
 }
+

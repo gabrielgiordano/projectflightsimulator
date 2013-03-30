@@ -1,7 +1,7 @@
 FILES = main.cpp src/*.cpp
 INC_PATH = ./third-party
 LIB_PATH = ./lib
-LIB = -lSOIL -lGL -lGLU -lglut -lGLM
+LIB = -lSOIL -lGL -lGLU -lglut -lGLM -ljpeg -lpng
 OUTPUT = /home/gabriel/a.exe
 
 all:

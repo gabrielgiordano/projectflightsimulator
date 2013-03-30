@@ -2,7 +2,7 @@
 #define APPLICATION_H
 
 #include "framework.h"
-#include "../headers/object.h"
+#include "object.h"
 
 #include <GL/gl.h>
 #include <glm/glm.hpp>
@@ -15,7 +15,8 @@ class Application : public Framework
 
 private:
     
-    Object object;
+    Object terrain, mig, t50, harrier;
+
     vec4 lightAmbient;
     vec4 lightDiffuse;
     vec4 lightPosition;

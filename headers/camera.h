@@ -17,6 +17,8 @@ public:
     Camera(vec3 eye, vec3 center, vec3 upp);
     ~Camera() {}
 
+    void setCamera();
+
     void setCoordinateSystem(vec3 origin, vec3 axisX, vec3 axisY, vec3 axisZ);
     void translate(vec3 distance);
     void translateInAxisX(GLfloat distance);
@@ -25,8 +27,7 @@ public:
     void rotateInAxisX(GLfloat pitchAngle);
     void rotateInAxisY(GLfloat yawAngle);
     void rotateInAxisZ(GLfloat rollAngle);
-
-    void setCamera();
+    void getCoordinateSystem(vec3 * coordinate);
 
 };
 

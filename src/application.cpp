@@ -16,7 +16,6 @@
 #define l 108
 #define L 76
 
-
 Application::Application()
 {
     lightAmbient = vec4(0.5f, 0.5f, 0.5f, 1.0f);
@@ -31,9 +30,13 @@ void Application::display ()
     // Reset The Current Modelview Matrix
     glLoadIdentity();
 
-    glTranslatef(0.0f, 0.0f, 0.0f);
+    glTranslatef(0.0f,0.0f,-3.0f);
 
-    object.draw();
+    terrain.draw();
+    t50.draw();
+    /*harrier.draw();
+    mig.draw();*/
+    
 
     glutSwapBuffers();
 }
@@ -52,7 +55,7 @@ void Application::reshape(GLint width, GLint height)
     glLoadIdentity();
  
     // Calculate The Aspect Ratio Of The Window
-    gluPerspective(60.0f,(GLdouble)width/(GLdouble)height,0.1f,300.0f);
+    gluPerspective(60.0f,(GLdouble)width/(GLdouble)height,0.1f,10000.0f);
 
     // Select The Modelview Matrix
     glMatrixMode(GL_MODELVIEW);
@@ -63,15 +66,15 @@ void Application::keyboard(GLubyte key, GLsizei x, GLsizei y) {
     switch(key) {
         case W:
         case w:
-            object.translate(vec3(0.0f, 0.0f, -1.0f));
-            break;
-        case A:
-        case a:
+            t50.translateInAxisZ(-1.0f);
             break;
         case S:
         case s:
-            object.translate(vec3(0.0f, 0.0f, +1.0f));
+            t50.translateInAxisZ(1.0f);
             break;
+        case A:
+        case a:
+            break;        
         case D:
         case d:
             break;
@@ -83,16 +86,16 @@ void Application::keyboard(GLubyte key, GLsizei x, GLsizei y) {
 void Application::special(GLint key, GLint x, GLint y) { 
     switch(key) {
         case UP_ARROW:
-            object.rotateInAxisX(-1.0f);
+            t50.rotateInAxisX(+1.0f);
             break;
         case DOWN_ARROW:
-            object.rotateInAxisX(+1.0f);
+            t50.rotateInAxisX(-1.0f);
             break;
         case LEFT_ARROW:
-            object.rotateInAxisZ(-1.0f);
+            t50.rotateInAxisZ(+1.0f);
             break;
         case RIGHT_ARROW:
-            object.rotateInAxisZ(+1.0f);  
+            t50.rotateInAxisZ(-1.0f);  
             break;
     }
 }
@@ -101,8 +104,8 @@ void Application::load()
 {
     glEnable(GL_TEXTURE_2D);
     glShadeModel (GL_SMOOTH);
-    // glClearColor(0.706, 0.851, 1.0, 0.0);    
-    glClearColor(0.0, 0.0, 0.0, 0.0);    
+    glClearColor(0.706, 0.851, 1.0, 0.0);    
+    // glClearColor(0.0, 0.0, 0.0, 0.0);    
     // Depth Buffer Setup
     glClearDepth(1.0f);
     // Enables Depth Testing
@@ -111,8 +114,6 @@ void Application::load()
     // Really Nice Perspective Calculations
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
-    startEnvironment();
-
     // Setup The Ambient Light
     glLightfv(GL_LIGHT1, GL_AMBIENT, &lightAmbient[0]);
     // Setup The Diffuse Light
@@ -120,12 +121,32 @@ void Application::load()
     // Position The Light
     glLightfv(GL_LIGHT1, GL_POSITION, &lightPosition[0]);
     // Enable Light One
+    // glEnable(GL_LIGHT1);
     glEnable(GL_LIGHT1);
     glEnable(GL_LIGHTING);
+
+    startEnvironment();
+    
 }
 
 void Application::startEnvironment() 
-{
-    object.loadTexture("textures/tower.jpg");
-    object.loadOBJ("models/tower.obj");
+{    
+    terrain.loadOBJ("models/terrain/terrain.obj");
+    terrain.setDrawMode(true, true, true);
+    terrain.scale(1000.0f);
+    
+    t50.loadOBJ("models/t50/t50.obj");
+    t50.setDrawMode(true, true, true);
+    t50.setCoordinateSystem(vec3(0.0f, 0.0f, 0.0f),
+                            vec3(0.0f, 0.0f, 1.0f),
+                            vec3(0.0f, 1.0f, 0.0f),
+                            vec3(1.0f, 0.0f, 0.0f));
+    t50.rotateInAxisY(-90.0f);
+
+
+    /*harrier.loadOBJ("models/harrier/harrier.obj");
+    harrier.setDrawMode(true, true, true);
+
+    mig.loadOBJ("models/mig/mig.obj");
+    mig.setDrawMode(true, true, true);*/
 }

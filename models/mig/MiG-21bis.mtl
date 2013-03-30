@@ -1,0 +1,100 @@
+newmtl acmat_0
+Kd 1 1 1
+Ka 1 1 1
+Ks 0.5 0.5 0.5
+Ns 64
+Tr 0
+map_Kd R-60.png
+newmtl acmat_1
+Kd 1 1 1
+Ka 1 1 1
+Ks 0.5 0.5 0.5
+Ns 64
+Tr 0
+map_Kd Bomb.png
+newmtl acmat_2
+Kd 1 1 1
+Ka 1 1 1
+Ks 0.5 0.5 0.5
+Ns 64
+Tr 0
+map_Kd GSh-23.png
+newmtl acmat_3
+Kd 1 1 1
+Ka 1 1 1
+Ks 0.5 0.5 0.5
+Ns 64
+Tr 0
+map_Kd Tank.png
+newmtl acmat_4
+Kd 1 1 1
+Ka 1 1 1
+Ks 0.5 0.5 0.5
+Ns 64
+Tr 0
+map_Kd Default.png
+newmtl acmat_5
+Kd 1 1 1
+Ka 1 1 1
+Ks 0.5 0.5 0.5
+Ns 64
+Tr 0
+map_Kd Heat.png
+newmtl acmat_6
+Kd 1 1 1
+Ka 1 1 1
+Ks 0.5 0.5 0.5
+Ns 64
+Tr 0
+map_Kd Canopy.png
+newmtl acmat_7
+Kd 1 1 1
+Ka 1 1 1
+Ks 0.5 0.5 0.5
+Ns 64
+Tr 0
+map_Kd Cockpit.png
+newmtl acmat_8
+Kd 1 0 0
+Ka 0.2 0.2 0.2
+Ks 0.2 0.2 0.2
+Ns 128
+Tr 0
+newmtl acmat_9
+Kd 0.5 0.5 0.5
+Ka 0 0 0
+Ks 0 0 0
+Ns 60
+Tr 0
+newmtl acmat_10
+Kd 0.8 0.8 0.8
+Ka 0.2 0.2 0.2
+Ks 0.2 0.2 0.2
+Ns 128
+Tr 0
+newmtl acmat_11
+Kd 0.611765 0.576471 0.541176
+Ka 0.2 0.2 0.2
+Ks 0.2 0.2 0.2
+Ns 128
+Tr 0
+newmtl acmat_12
+Kd 1 1 1
+Ka 1 1 1
+Ks 0.5 0.5 0.5
+Ns 64
+Tr 0
+map_Kd Reflection.png
+newmtl acmat_13
+Kd 1 1 1
+Ka 1 1 1
+Ks 0.5 0.5 0.5
+Ns 64
+Tr 0
+map_Kd Pilot.png
+newmtl acmat_14
+Kd 0.8 0.8 0.8
+Ka 0.2 0.2 0.2
+Ks 0.2 0.2 0.2
+Ns 128
+Tr 1

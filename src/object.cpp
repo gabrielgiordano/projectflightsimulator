@@ -3,7 +3,8 @@
 Object::Object()
 {
     model = NULL;
-    texture = 0;
+    //texture = 0;
+    mode = 0;
     transformations = mat4(1.0f);
     this->origin = vec3(0.0f, 0.0f, 0.0f);
     this->axisX = vec3(1.0f, 0.0f, 0.0f);
@@ -41,10 +42,10 @@ void Object::loadOBJ(string filename)
     // So if you can export these directly from you modeling tool do it and comment these line
     // 3DS Max can calculate these for you and GLM is perfectly capable of loading them
     glmFacetNormals(model);
-    glmVertexNormals(model, 90.0);
+    glmVertexNormals(model, 90.0, GL_TRUE);
 }
 
-void Object::loadTexture(string filename)
+/*void Object::loadTexture(string filename)
 { 
     if(filename.size() == 0)
     {
@@ -73,43 +74,46 @@ void Object::loadTexture(string filename)
     glBindTexture(GL_TEXTURE_2D, texture);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-}
+}*/
 
 void Object::draw() {
 
     glMatrixMode(GL_MODELVIEW);
+    
     glPushMatrix();
+    
     glMultMatrixf(&transformations[0][0]);
 
-    if(model) {
-        if(texture == 0) {
-            glmDraw(model, GLM_SMOOTH);
-        }
-        else {
-            glBindTexture(GL_TEXTURE_2D, texture);
-            glmDraw(model, GLM_SMOOTH | GLM_TEXTURE);
-        }
-    }
+    /*if(texture)
+        glBindTexture(GL_TEXTURE_2D, texture);*/
+
+    glmDraw(model, mode);
+
     glPopMatrix();
+}
+
+void Object::scale(GLfloat factor) 
+{
+    glmScale(model, factor);
+}
+
+void Object::setDrawMode(GLboolean smooth, GLboolean texture, GLboolean material) 
+{
+    if(smooth)
+        mode |= GLM_SMOOTH;
+    if(texture)
+        mode |= GLM_TEXTURE;
+    if(material)
+        mode |= GLM_MATERIAL;
 }
 
 void Object::setCoordinateSystem(vec3 origin, vec3 axisX, vec3 axisY, vec3 axisZ) 
 {
-    mat4 matrix(1.0f);
-
-    row(matrix, 0, vec4(axisX,  0.0f));
-    row(matrix, 1, vec4(axisY,  0.0f));
-    row(matrix, 2, vec4(axisZ,  0.0f));
-    row(matrix, 3, vec4(origin, 1.0f));
-
-    matrix = affineInverse(matrix);
-
+    transformations = mat4(1.0f);
     this->origin = origin;
     this->axisX = axisX;
     this->axisY = axisY;
     this->axisZ = axisZ;
-
-    transformations = matrix;
 }
 
 void Object::translate(vec3 distance)
@@ -240,4 +244,12 @@ void Object::rotateInAxisZ(GLfloat rollAngle)
     transformations = rollMatrix * transformations;
 
     translate(origin_aux);
+}
+
+void Object::getCoordinateSystem(vec3 * coordinate) 
+{    
+    coordinate[0] = origin;
+    coordinate[1] = axisX;
+    coordinate[2] = axisY;
+    coordinate[3] = axisZ;
 }
